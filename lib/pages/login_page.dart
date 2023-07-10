@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class LoginPage extends StatefulWidget {
@@ -9,6 +10,38 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  //controller
+
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+
+
+  Future<User?> signIn() async {
+    // try {
+      final UserCredential = await FirebaseAuth.instance.signInWithEmailAndPassword(
+        email: _emailController.text.trim(),
+        password: _passwordController.text.trim(),
+      );
+
+      return UserCredential.user;
+      // Handle successful sign-in here
+    // } catch (e) {
+      // Handle sign-in error here
+    //   print('Sign-in error: $e');
+    // }
+    // return null;
+  }
+
+
+
+
+  @override
+  void dispose() {
+    _passwordController.dispose();
+    _emailController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -19,20 +52,21 @@ class _LoginPageState extends State<LoginPage> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
+                Icon(
+                  Icons.android,
+                  size: 100,
+                ),
 
-                Icon(Icons.android, size: 100,),
-
-                SizedBox(height: 40,),
+                SizedBox(
+                  height: 40,
+                ),
                 //  Greeting msg
 
                 SizedBox(
                   height: 20,
                 ),
-                Text(
-                  "Hello Again!",
-                  style: GoogleFonts.bebasNeue(
-                    fontSize: 50
-                  )),
+                Text("Hello Again!",
+                    style: GoogleFonts.bebasNeue(fontSize: 50)),
 
                 SizedBox(
                   height: 10,
@@ -62,6 +96,7 @@ class _LoginPageState extends State<LoginPage> {
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 20),
                       child: TextField(
+                        controller: _emailController,
                         decoration: InputDecoration(
                           border: InputBorder.none,
                           hintText: "Email",
@@ -86,6 +121,7 @@ class _LoginPageState extends State<LoginPage> {
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 20),
                       child: TextField(
+                        controller: _passwordController,
                         obscureText: true,
                         decoration: InputDecoration(
                           border: InputBorder.none,
@@ -104,18 +140,21 @@ class _LoginPageState extends State<LoginPage> {
 
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: 25),
-                  child: Container(
-                    padding: EdgeInsets.all(20),
-                    decoration: BoxDecoration(
-                        color: Colors.deepPurpleAccent,
-                        borderRadius: BorderRadius.circular(12)),
-                    child: Center(
-                      child: Text(
-                        "Sign In",
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 20),
+                  child: GestureDetector(
+                    onTap: () => signIn(),
+                    child: Container(
+                      padding: EdgeInsets.all(20),
+                      decoration: BoxDecoration(
+                          color: Colors.deepPurpleAccent,
+                          borderRadius: BorderRadius.circular(12)),
+                      child: Center(
+                        child: Text(
+                          "Sign In",
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 20),
+                        ),
                       ),
                     ),
                   ),
@@ -132,11 +171,8 @@ class _LoginPageState extends State<LoginPage> {
                   children: [
                     Text(
                       "not a member? ",
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold
-                      ),
+                      style: TextStyle(fontWeight: FontWeight.bold),
                     ),
-
                     Text(
                       "Register Now",
                       style: TextStyle(
