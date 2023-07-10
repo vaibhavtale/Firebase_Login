@@ -3,7 +3,8 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_fire/pages/login_page.dart';
 
-import 'home_page.dart';
+import '../pages/home_page.dart';
+import 'auth_page.dart';
 
 class MainPage extends StatefulWidget {
   const MainPage({Key? key}) : super(key: key);
@@ -22,7 +23,7 @@ class _MainPageState extends State<MainPage> {
            if (snapshot.hasData) {
              return HomePage();
           } else {
-            return LoginPage();
+            return AuthPage();
           }
         },
       ),

@@ -9,14 +9,22 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  final user = FirebaseAuth.instance.currentUser!;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        child: ElevatedButton(
-          onPressed: () async => await FirebaseAuth.instance.signOut(),
-          child: Text("Log Out"),
-        )
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text("Logged In as :" + user.email!),
+            ElevatedButton(
+              onPressed: () async => await FirebaseAuth.instance.signOut(),
+              child: Text("Log Out"),
+            ),
+          ],
+        ),
       ),
     );
   }

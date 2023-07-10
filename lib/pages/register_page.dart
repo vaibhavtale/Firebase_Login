@@ -1,37 +1,52 @@
-import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-import 'forgot_passwor_page.dart';
+class RegisterPage extends StatefulWidget {
+  final VoidCallback showLoginPage;
 
-class LoginPage extends StatefulWidget {
-  final VoidCallback showRegisterPage;
-
-  const LoginPage({Key? key, required this.showRegisterPage}) : super(key: key);
+  const RegisterPage({
+    Key? key,
+    required this.showLoginPage,
+  }) : super(key: key);
 
   @override
-  State<LoginPage> createState() => _LoginPageState();
+  State<RegisterPage> createState() => _RegisterPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
-  //controller
-
+class _RegisterPageState extends State<RegisterPage> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
+  final _confirmpasswordController = TextEditingController();
 
-  Future<User?> signIn() async {
-    await FirebaseAuth.instance.signInWithEmailAndPassword(
-      email: _emailController.text.trim(),
-      password: _passwordController.text.trim(),
-    );
-    return null;
-  }
 
   @override
   void dispose() {
     _passwordController.dispose();
     _emailController.dispose();
+    _confirmpasswordController.dispose();
     super.dispose();
+  }
+
+  Future<User?> signUp() async {
+    if(passwordConfirmed()){
+      await FirebaseAuth.instance.createUserWithEmailAndPassword(
+        email: _emailController.text.trim(),
+        password: _passwordController.text.trim(),
+      );
+    }else{
+      print("Sahi password dal");
+    }
+    return null;
+  }
+
+  bool passwordConfirmed(){
+
+    if(_passwordController.text.trim() == _confirmpasswordController.text.trim()){
+      return true;
+    }else{
+      return false;
+    }
   }
 
   @override
@@ -57,7 +72,7 @@ class _LoginPageState extends State<LoginPage> {
                 SizedBox(
                   height: 20,
                 ),
-                Text("Hello Again!",
+                Text("Welcome hey!",
                     style: GoogleFonts.bebasNeue(fontSize: 50)),
 
                 SizedBox(
@@ -65,7 +80,7 @@ class _LoginPageState extends State<LoginPage> {
                 ),
 
                 Text(
-                  "Welcome back we missed you",
+                  "Rgister below with details.",
                   style: TextStyle(
                     color: Colors.grey[600],
                     fontStyle: FontStyle.italic,
@@ -101,6 +116,7 @@ class _LoginPageState extends State<LoginPage> {
                 SizedBox(
                   height: 10,
                 ),
+
                 //  password field
 
                 Padding(
@@ -124,41 +140,33 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                 ),
 
-                SizedBox(
-                  height: 10,
-                ),
+                SizedBox(height: 10,),
 
-                //forgot password
+                //confirm password
 
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 25),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      GestureDetector(
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) {
-                                return ForgotPasswordPage();
-                              },
-                            ),
-                          );
-                        },
-                        child: Text(
-                          "Forgot password",
-                          style: TextStyle(
-                            color: Colors.blueAccent,
-                          ),
+                  padding: EdgeInsets.symmetric(horizontal: 25),
+                  child: Container(
+                    decoration: BoxDecoration(
+                        color: Colors.grey[200],
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(color: Colors.white)),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      child: TextField(
+                        controller: _confirmpasswordController,
+                        obscureText: true,
+                        decoration: InputDecoration(
+                          border: InputBorder.none,
+                          hintText: "confirm password",
                         ),
                       ),
-                    ],
+                    ),
                   ),
                 ),
 
                 SizedBox(
-                  height: 15,
+                  height: 20,
                 ),
 
                 //  login button
@@ -166,7 +174,7 @@ class _LoginPageState extends State<LoginPage> {
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: 25),
                   child: GestureDetector(
-                    onTap: signIn,
+                    onTap: signUp,
                     child: Container(
                       padding: EdgeInsets.all(20),
                       decoration: BoxDecoration(
@@ -174,7 +182,7 @@ class _LoginPageState extends State<LoginPage> {
                           borderRadius: BorderRadius.circular(12)),
                       child: Center(
                         child: Text(
-                          "Sign In",
+                          "Sign Up",
                           style: TextStyle(
                               color: Colors.white,
                               fontWeight: FontWeight.bold,
@@ -206,13 +214,13 @@ class _LoginPageState extends State<LoginPage> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      "not a member? ",
+                      "already a member? ",
                       style: TextStyle(fontWeight: FontWeight.bold),
                     ),
                     GestureDetector(
-                      onTap: widget.showRegisterPage,
+                      onTap: widget.showLoginPage,
                       child: Text(
-                        "Register Now",
+                        "LogIn",
                         style: TextStyle(
                           color: Colors.blue,
                         ),
@@ -226,5 +234,6 @@ class _LoginPageState extends State<LoginPage> {
         ),
       ),
     );
+
   }
 }
