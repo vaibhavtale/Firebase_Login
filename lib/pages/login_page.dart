@@ -12,27 +12,16 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   //controller
 
-  final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _passwordController = TextEditingController();
-
+  final  _emailController = TextEditingController();
+  final  _passwordController = TextEditingController();
 
   Future<User?> signIn() async {
-    // try {
-      final UserCredential = await FirebaseAuth.instance.signInWithEmailAndPassword(
+      await FirebaseAuth.instance.signInWithEmailAndPassword(
         email: _emailController.text.trim(),
         password: _passwordController.text.trim(),
       );
-
-      return UserCredential.user;
-      // Handle successful sign-in here
-    // } catch (e) {
-      // Handle sign-in error here
-    //   print('Sign-in error: $e');
-    // }
-    // return null;
+      return null;
   }
-
-
 
 
   @override
@@ -141,7 +130,7 @@ class _LoginPageState extends State<LoginPage> {
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: 25),
                   child: GestureDetector(
-                    onTap: () => signIn(),
+                    onTap: signIn,
                     child: Container(
                       padding: EdgeInsets.all(20),
                       decoration: BoxDecoration(
@@ -159,6 +148,17 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                   ),
                 ),
+
+               /* ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.green),
+                  onPressed: signIn, () {
+                    FirebaseAuth.instance.signInWithEmailAndPassword(
+                        email: _emailController.text.trim(),
+                        password: _passwordController.text.trim());
+                    signIn();
+                  }
+                  child: Text("LogIn"),),*/
 
                 SizedBox(
                   height: 50,

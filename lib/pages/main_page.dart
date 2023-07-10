@@ -19,10 +19,10 @@ class _MainPageState extends State<MainPage> {
       body: StreamBuilder<User?>(
         stream: FirebaseAuth.instance.authStateChanges(),
         builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            return LoginPage();
+           if (snapshot.hasData) {
+             return HomePage();
           } else {
-            return HomePage();
+            return LoginPage();
           }
         },
       ),
