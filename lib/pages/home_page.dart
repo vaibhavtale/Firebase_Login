@@ -16,15 +16,19 @@ class _HomePageState extends State<HomePage> {
   List<String> docIDs = [];
 
   Future getDocID() async {
-      await FirebaseFirestore.instance.collection('users').get().then(
-            (snapshot) => snapshot.docs.forEach(
-              (document) {
-                print(document.reference);
-                docIDs.add(document.reference.id);
-              },
-            ),
-      );
-
+    await FirebaseFirestore.instance
+        .collection('users')
+        // .orderBy('age', descending: true)
+        .where('age', isGreaterThan: 20)
+        .get()
+        .then(
+          (snapshot) => snapshot.docs.forEach(
+            (document) {
+              print(document.reference);
+              docIDs.add(document.reference.id);
+            },
+          ),
+        );
   }
 
   @override
