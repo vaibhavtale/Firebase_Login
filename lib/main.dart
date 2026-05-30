@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 
+String API_KEY = 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;
+
 void main() async{
 
   WidgetsFlutterBinding.ensureInitialized();
